@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% set active = 'wrong' %}
+{% block title %}錯題本 · Math 1.4{% endblock %}
+{% block content %}
+<section class="wrongbook">
+  <h1>錯題本</h1>
+  {% if not book %}
+    <p class="empty">還沒有錯題。繼續練習吧！</p>
+  {% else %}
+    <p class="hint">共 {{ book|length }} 題（最多保留 200 題）</p>
+    <ol class="wrong-list">
+      {% for item in book %}
+      <li class="card" data-qid="{{ item.qid }}">
+        <div class="card-head">
+          <span class="tid">{{ item.tid }}</span>
+          <span class="when">{{ item.t[:16].replace('T', ' ') }}</span>
+          <button class="link danger del" data-qid="{{ item.qid }}">刪除</button>
+        </div>
+        <div class="stmt" data-tex="{{ item.stmt_tex }}"></div>
+        <ul class="choices">
+          {% for c in item.choices %}
+          <li class="choice {{ 'right' if loop.index0 == item.correct_index else '' }} {{ 'mine' if loop.index0 == item.your_index else '' }}">
+            <span class="letter">{{ 'ABCD'[loop.index0] }}</span>
+            <span class="tex" data-tex="{{ c }}"></span>
+          </li>
+          {% endfor %}
+        </ul>
+        {% if item.reveal_tex %}
+        <p class="reveal">正確答案：<span class="tex" data-tex="{{ item.reveal_tex }}"></span></p>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ol>
+  {% endif %}
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/wrongbook.js') }}"></script>
+{% endblock %}

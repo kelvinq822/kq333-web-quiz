@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% set active = 'me' %}
+{% block title %}我的 · Math 1.4{% endblock %}
+{% block content %}
+<section class="me">
+  <h1>{{ me.name }}</h1>
+  <dl class="stats">
+    <div><dt>積分</dt><dd>{{ me.points }}</dd></div>
+    <div><dt>名次</dt><dd>{% if me.rank %}#{{ me.rank }}{% else %}—{% endif %}</dd></div>
+    <div><dt>答對</dt><dd>{{ me.correct }} / {{ me.attempts }}</dd></div>
+    <div><dt>今日</dt><dd>{{ me.day_attempts }}</dd></div>
+  </dl>
+
+  <p class="warn">此帳號沒有密碼，任何人輸入同一用戶名即可登入。請勿使用真實姓名。</p>
+
+  <button class="btn big danger" id="logout">登出</button>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+(function () {
+  document.getElementById('logout').addEventListener('click', async function () {
+    await fetch('/api/logout', { method: 'POST' });
+    location.href = '/login';
+  });
+})();
+</script>
+{% endblock %}

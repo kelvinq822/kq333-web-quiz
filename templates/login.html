@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}登入 · Math 1.4 微分練習{% endblock %}
+{% block content %}
+<section class="login">
+  <h1>微分練習</h1>
+  <p class="sub">Math Test 1.4 · 口算選擇題</p>
+
+  <form id="loginForm" autocomplete="off">
+    <label for="name">用戶名</label>
+    <input id="name" name="name" type="text" inputmode="text" maxlength="16"
+           placeholder="3–16 字，例如 Kelvin" autofocus required>
+    <button class="btn primary big" type="submit">開始</button>
+  </form>
+
+  <p class="warn">
+    此帳號<strong>沒有密碼</strong>。任何人輸入同一個用戶名即可登入，看到你的分數與錯題本。請勿使用真實姓名。
+  </p>
+  <p class="hint">首次輸入即自動註冊（上限 50 人）。</p>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+(function () {
+  var form = document.getElementById('loginForm');
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    var name = document.getElementById('name').value.trim();
+    var res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name })
+    });
+    var data = await res.json();
+    if (res.ok) { location.href = '/'; return; }
+    alert(data.message || '登入失敗');
+  });
+})();
+</script>
+{% endblock %}

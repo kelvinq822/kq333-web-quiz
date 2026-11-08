@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% set active = 'quiz' %}
+{% block title %}答題 · Math 1.4{% endblock %}
+{% block content %}
+<section class="quiz" id="quiz">
+  <div class="prompt">
+    <span class="label">Find <span class="dy">dy/dx</span>:</span>
+    <div class="stmt" id="stmt"></div>
+    <p class="note">所有選項均未化簡；常數在前，項依微分順序排列。</p>
+  </div>
+
+  <div class="options" id="options"></div>
+
+  <button class="btn primary big submit" id="submit" disabled>提交</button>
+  <p class="feedback" id="feedback"></p>
+</section>
+
+<script>
+  window.__INITIAL_QUESTION__ = {{ (question|tojson) if question else 'null' }};
+</script>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/quiz.js') }}"></script>
+{% endblock %}

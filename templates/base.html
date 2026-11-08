@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>{% block title %}Math 1.4 微分練習{% endblock %}</title>
+<link rel="manifest" href="{{ url_for('static', filename='manifest.webmanifest') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% if config.USE_LOCAL_KATEX %}
+<link rel="stylesheet" href="{{ url_for('static', filename='vendor/katex/katex.min.css') }}">
+{% else %}
+<link rel="stylesheet" href="{{ katex_base }}katex.min.css">
+{% endif %}
+</head>
+<body>
+{% if me is defined and me %}
+<header class="topbar">
+  <div class="who">
+    <span class="name">{{ me.name }}</span>
+    <span class="rank">{% if me.rank %}#{{ me.rank }}{% else %}—{% endif %}</span>
+  </div>
+  <div class="chips">
+    <span class="chip"><b id="score">{{ me.points }}</b> 分</span>
+    <span class="chip">今日 <b id="today">{{ me.day_attempts }}</b></span>
+    <span class="chip">🔥 <b id="streak">{{ me.streak }}</b></span>
+  </div>
+</header>
+{% endif %}
+
+<main class="page">
+{% block content %}{% endblock %}
+</main>
+
+{% if me is defined and me %}
+<nav class="tabbar">
+  <a href="/" class="{{ 'active' if active == 'quiz' else '' }}">答題</a>
+  <a href="/wrongbook" class="{{ 'active' if active == 'wrong' else '' }}">錯題本</a>
+  <a href="/board" class="{{ 'active' if active == 'board' else '' }}">排行榜</a>
+  <a href="/me" class="{{ 'active' if active == 'me' else '' }}">我的</a>
+</nav>
+{% endif %}
+
+{% if config.USE_LOCAL_KATEX %}
+<script src="{{ url_for('static', filename='vendor/katex/katex.min.js') }}"></script>
+{% else %}
+<script src="{{ katex_base }}katex.min.js"></script>
+{% endif %}
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% set active = 'board' %}
+{% block title %}排行榜 · Math 1.4{% endblock %}
+{% block content %}
+<section class="board">
+  <h1>排行榜 <span class="sub">全部</span></h1>
+  {% if rank and (not rows or rank > rows|length) %}
+    <p class="myrank">你的名次：第 {{ rank }} 名</p>
+  {% endif %}
+  <table class="board-table">
+    <thead>
+      <tr><th>#</th><th>玩家</th><th class="num">積分</th><th class="num">正確率</th><th class="num">題數</th></tr>
+    </thead>
+    <tbody>
+      {% for row in rows %}
+      <tr class="{{ 'me' if me and row.uid == session.get('uid') else '' }}">
+        <td>{{ row.rank }}</td>
+        <td class="pname">{{ row.name }}</td>
+        <td class="num">{{ row.points }}</td>
+        <td class="num">{{ row.accuracy }}%</td>
+        <td class="num">{{ row.attempts }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="empty">還沒有人作答。</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
